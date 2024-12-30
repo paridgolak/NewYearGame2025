@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Year Game 2025</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #ffcccb, #ffebcd);
+        }
+        .container {
+            margin: 20px auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px 0;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .question {
+            margin: 20px 0;
+        }
+        .gift {
+            cursor: pointer;
+            width: 80%;
+            max-width: 300px;
+        }
+        .gif-img {
+            width: 80%;
+            margin: 10px 0;
+        }
+        .small-icon {
+            width: 50px;
+            margin-top: 10px;
+        }
+        .footer {
+            font-size: 10px;
+            color: gray;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="welcome-screen">
+        <h1>Happy New Year 2025!</h1>
+        <img src="landing.gif" alt="Celebration GIF" class="gif-img">
+        <button onclick="goToDOBInput()">Enter the Game</button>
+        <div class="footer">Developed by Golak and Tripathy</div>
+    </div>
+
+    <div class="container hidden" id="dob-input-screen">
+        <h2>Enter Your Friend's Date of Birth</h2>
+        <img src="dob-image.jpg" alt="Date of Birth" class="gif-img">
+        <input type="date" id="dob" />
+        <button onclick="checkDOB()">Submit</button>
+        <img src="bottom-icon.png" alt="Icon" class="small-icon">
+        <div class="footer">Developed by Golak and Tripathy</div>
+    </div>
+
+    <div class="container hidden" id="quiz-screen">
+        <h2 id="question-text">Question will appear here</h2>
+        <div id="options">
+            <!-- Options will be dynamically inserted here -->
+        </div>
+        <div class="footer">Developed by Golak and Tripathy</div>
+    </div>
+
+    <div class="container hidden" id="gift-screen">
+        <h2>Congratulations!</h2>
+        <img src="gift-box.gif" alt="Gift Box" class="gift" onclick="openGift()">
+        <div class="footer">Developed by Golak and Tripathy</div>
+    </div>
+
+    <div class="container hidden" id="video-screen">
+        <h2>Here's Your Surprise!</h2>
+        <video width="100%" controls>
+            <source src="your-video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="footer">Developed by Golak and Tripathy</div>
+    </div>
+
+    <script>
+        const questionsFor11 = [
+            { question: " Tumhari best friend ko kis cheez ke liye award diya jana chahiye?", options: ["Best Drama Queen", "Most Caring Friend", "Craziest Dance Moves", "Reels Post"] },
+            { question: "Aagar Maa Ka Naam Mrs. Nine Hai, Beti Ka Naam 8 Hai Aur Beta Ka Naam 7 Hai To Papa Ka Naam Kya Hai?", options: ["Mr. 15", "Mr. 89", "Mr. 10", "Mr. 9"] },
+            { question: "Agar aapka sabse accha dost ek khaana ban jaaye, toh woh kya hoga?", options: ["Chatpati Pao Bhaji (Tadka aur full mood)", "Meethi Gulab Jamun (Soft aur sabka favourite)", "Masaledaar Biryani (Surprise aur mazedaar)", "Kurkuri Pizza (Cool aur crispy vibes)"] },
+            { question: "Ye Aisi Konsi Jagah Hai Jahan Jitne Jaate Hain , Uss Se Ek Jyada Aate Hain?", options: ["khud socho", "No Options🙅‍♂️", "Socho Socho 🤔", "🤔"] },
+            { question: "What is your best friend's favorite song?", options: ["song1.mp3", "song2.mp3", "song3.mp3", "song4.mp3", "Other"], isAudio: true },
+            { question: "Which picture describes your friend most?", options: ["friend1.gif", "friend2.gif", "friend3.gif", "friend4.gif"], isImage: true }
+        ];
+
+        const questionsFor16 = [
+            { question: " Tumhari best friend ko kis cheez ke liye award diya jana chahiye?", options: ["Best Drama Queen", "Most Caring Friend", "Craziest Dance Moves", "Reels Post"] },
+            { question: "Aagar Maa Ka Naam Mrs. Nine Hai, Beti Ka Naam 8 Hai Aur Beta Ka Naam 7 Hai To Papa Ka Naam Kya Hai?", options: ["Mr. 15", "Mr. 89", "Mr. 10", "Mr. 9"] },
+            { question: "Agar aapka sabse accha dost ek khaana ban jaaye, toh woh kya hoga?", options: ["Chatpati Pao Bhaji (Tadka aur full mood)", "Meethi Gulab Jamun (Soft aur sabka favourite)", "Masaledaar Biryani (Surprise aur mazedaar)", "Kurkuri Pizza (Cool aur crispy vibes)"] },
+            { question: "What is their favorite drink?", options: ["Tea", "Coffee", "Juice", "Soda"] },
+            { question: "What is your best friend's favorite song?", options: ["song1.mp3", "song2.mp3", "song3.mp3", "song4.mp3", "Other"], isAudio: true },
+            { question: "Which picture describes your friend most?", options: ["friend1.gif", "friend2.gif", "friend3.gif", "friend4.gif"], isImage: true }
+        ];
+
+        let currentQuestionIndex = 0;
+        let selectedQuestions = [];
+
+        function goToDOBInput() {
+            document.getElementById("welcome-screen").classList.add("hidden");
+            document.getElementById("dob-input-screen").classList.remove("hidden");
+        }
+
+        function checkDOB() {
+            const dob = document.getElementById("dob").value;
+            const day = new Date(dob).getDate();
+
+            if (day === 11) {
+                selectedQuestions = questionsFor11;
+                startQuiz();
+            } else if (day === 16) {
+                selectedQuestions = questionsFor16;
+                startQuiz();
+            } else {
+                alert("This date is not supported for the game.");
+            }
+        }
+
+        function startQuiz() {
+            document.getElementById("dob-input-screen").classList.add("hidden");
+            document.getElementById("quiz-screen").classList.remove("hidden");
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex < selectedQuestions.length) {
+                const questionObj = selectedQuestions[currentQuestionIndex];
+                document.getElementById("question-text").innerText = questionObj.question;
+
+                const optionsDiv = document.getElementById("options");
+                optionsDiv.innerHTML = "";
+
+                questionObj.options.forEach((option) => {
+                    const button = document.createElement("button");
+
+                    if (questionObj.isImage) {
+                        const img = document.createElement("img");
+                        img.src = option;
+                        img.alt = "Option Image";
+                        img.classList.add("gif-img");
+                        button.appendChild(img);
+                    } else if (questionObj.isAudio) {
+                        const audioContainer = document.createElement("div");
+                        const audio = document.createElement("audio");
+                        audio.controls = true;
+                        const source = document.createElement("source");
+                        source.src = option;
+                        source.type = "audio/mpeg";
+                        audio.appendChild(source);
+                        audioContainer.appendChild(audio);
+
+                        const label = document.createElement("span");
+                        label.innerText = option === "Other" ? "Other" : `Play Audio`;
+                        label.style.display = "block";
+                        label.style.marginTop = "5px";
+                        audioContainer.appendChild(label);
+
+                        button.appendChild(audioContainer);
+                    } else {
+                        button.innerText = option;
+                    }
+
+                    button.onclick = () => nextQuestion();
+                    optionsDiv.appendChild(button);
+                });
+            } else {
+                endQuiz();
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
+        function endQuiz() {
+            document.getElementById("quiz-screen").classList.add("hidden");
+            document.getElementById("gift-screen").classList.remove("hidden");
+        }
+
+        function openGift() {
+            window.open("https://drive.google.com/file/d/13RA0f4loenDJCVtGDymqNQqDazFBlftU/view?usp=drive_link", "_blank");
+        }
+    </script>
+</body>
+</html>
